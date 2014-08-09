@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Get started
+    </title>
+    <script src="./jquery.js"></script>
+    <style>
+    h1
+    {
+       font-family:Bitstream Vera Sans Mono,monospace;
+       color:white;
+       text-align:center;
+   }
+   .button:hover
+   {
+    cursor:pointer;
+} 
+.button
+{
+    background-color:#6666ff;
+    text-align:center;
+    padding-top:1%;
+    border-radius:10px;
+    padding:1%;
+}
+body
+{
+  background-color:#303030;
+  height:10%;
+}
+.button:hover
+{
+    background-color:blue;
+    box-shadow: 0px 0px 4px 2px #abcfba
+}
+#sem
+{
+    position:absolute;
+    margin-left:80%;
+    margin-top:-1.5%;
+}
+#addq
+{
+    position:absolute;
+    margin-left:5%;
+}
+#wt
+{
+    position:absolute;
+    margin-left:43%;
+    margin-top:5%;
+}
+#wtform
+{
+    position:absolute;
+    margin-top:10%;
+    margin-left:2%;
+}
+#marks
+{
+    position:absolute;
+    margin-top:0%;
+    margin-left:0%;
+}
+#getmarks
+{
+    position:absolute;
+    margin-top:0%;
+    color:#989898;
+}
+#allchapters
+{
+ margin-left:53%;
+ color:#989898;
+}
+input
+{
+    color:#989898;
+}
+#tmpbut
+{
+    position:absolute;
+    margin-left:104%;
+    margin-top:0%;
+}
+.resultdivs
+{
+    padding:15px;
+    position:relative;
+    top:-21px;
+    margin-left:99%;
+    background-color:#ADFF2F;
+    border-radius:5px;
+
+}
+#gtotal
+{
+    position:absolute;
+    height:10px;
+    width:22px;
+    border-radius:10px;
+    background-color:#ffd700;
+    top:56%;
+    right:5%;
+    padding:5%;
+}
+
+
+</style>
+<script>
+arrayofchapters = []
+sum = Array(30);
+gt = 0;
+TotalMarks = 0;
+reqjson = {}
+function limitexceeded()
+{
+    console.log("Total Marks Exceeded");
+}
+function cleardata(id)
+{
+    var div=document.getElementById(id);
+                //div.style.background="yellow";
+                div.value="";
+                div.style.color="black";
+                //console.log(div.value);
+            }
+            function changegrandiv()
+            {
+                var i;
+                var sum=0;
+                for(var i=1;i<=4;i++)
+                {
+                    var t=document.getElementById("result_"+i);
+                    sum += eval(t.innerHTML); 
+                }
+                var gd=document.getElementById("gtotal");
+                gd.innerHTML=sum;
+            }
+            function addvalue(value,id,marks)
+            {
+                if(value==undefined)
+                {
+                    value=0;
+                }
+                //console.log("value="+value);
+                value=eval(value);
+                console.log(id);
+                chapterno=eval(id.slice(5,-2));
+                sum[chapterno] += value*marks;
+                gt += value*marks;
+                var gtdiv=document.getElementById("gtotal");
+                gtdiv.innerHTML=gt;
+                var resdiv=document.getElementById("result_"+chapterno);
+                resdiv.innerHTML=sum[chapterno];
+                if (gt>TotalMarks)
+                    limitexceeded();
+            }
+            function submitform()
+            {
+                //var tempjson = JSON.stringify(reqjson);
+                //alert(JSON.stringify(reqjson));
+               /*finaljson=reqjson;
+                tmpjsonstring=JSON.stringify(finaljson);
+                thisstring=tmpjsonstring.replace(/\"/g,"\'");*/
+
+                //alert("hey");
+               /* var xml=new XMLHttpRequest();
+                xml.onreadystatechange=function()
+                {
+                    if(xml.status==200 && xml.readyState==4)
+                    {
+                        alert(xml.responseText);
+                    }
+                }
+                xml.open("GET","127.0.0.1:8000/paper/default/sendjson&1="+thisstring,true);
+                xml.send();
+                *///console.log("This is it: "+tmpjsonstring.replace(/\"/g,"\'"));
+            }
+            function refreshresdivs()
+            {
+                tmpchapsum = Array(arrayofchapters.length);
+
+                for(var j=0;j<tmpchapsum.length;j++)
+                {
+                    tmpchapsum[j]=0;
+                    reqjson[arrayofchapters[j]]={1:0, 2:0, 3:0, 4:0}               
+                }
+                //console.log(reqjson);
+                var tmpgtsum = 0;
+                var tmp=document.getElementsByClassName("ques");
+                var grdiv=document.getElementById("gtotal");
+                for(var i=0;i<tmp.length;i++)
+                {
+                    console.log("very tempting:"+tmp[i].id);
+                    var chapter=tmp[i].id.slice(5,-2);
+                    var marks=tmp[i].id.slice(-1);
+                    ;                   var rsdiv=document.getElementById("result_"+chapter);
+                    if(tmp[i].value.slice(0,6) != "Number" && tmp[i].value != "")
+                    {
+                        tmpchapsum[parseInt(i/4)] +=tmp[i].value*marks;
+                        rsdiv.innerHTML=tmpchapsum[parseInt(i/4)];
+                        tmpgtsum += tmp[i].value*marks;
+                        reqjson[chapter][marks]=eval(tmp[i].value); 
+                    }
+                }
+                grdiv.innerHTML=tmpgtsum;
+                console.log("TotalMarks:"+TotalMarks);
+                checkval = document.getElementById("lastbutton");
+                //conole.log(checkval);
+                
+                if(grdiv.innerHTML==TotalMarks)
+                {
+                    console.log("equal");
+                    checkval.style.visibility="visible";
+                    form=document.getElementById("completeform");
+                    form.appendChild(checkval);
+                }
+                else
+                {
+                    checkval.style.visibility="hidden";
+                    form=document.getElementById("completeform");
+                    form.appendChild(checkval);
+                    console.log("not yet");
+                }
+            }
+
+            function appendtoform(i)
+            {
+                form=document.getElementById("completeform");
+                inp1=document.createElement("input");
+                inp2=document.createElement("input");
+                inp3=document.createElement("input");
+                inp4=document.createElement("input");
+                inp1.id="input" + i + "_1";
+                inp2.id="input" + i + "_2";
+                inp3.id="input" + i + "_3";
+                inp4.id="input" + i + "_4";
+
+                inp1.name="input" + i + "_1";
+                inp2.name="input" + i + "_2";
+                inp3.name="input" + i + "_3";
+                inp4.name="input" + i + "_4";
+
+                inp1.className="ques";
+                inp2.className="ques";
+                inp3.className="ques";
+                inp4.className="ques";
+
+                inp1.value="Number of 1 mark questions"; 
+                inp2.value="Number of 2 mark questions"; 
+                inp3.value="Number of 3 mark questions"; 
+                inp4.value="Number of 4 mark questions"; 
+                res=document.createElement("div");
+                res.id="result_" + i;
+                res.style.display="inline";
+                res.className="resultdivs"
+                inp1.type=inp2.type=inp3.type=inp4.type="text";
+
+                inp1.required=inp2.required=inp3.required=inp4.required=true;
+
+                form.appendChild(inp1);
+                form.appendChild(inp2);
+                form.appendChild(inp3);
+                form.appendChild(inp4);
+                form.appendChild(res);
+                
+                inp1.onfocus=function(){cleardata(this.id)};
+                inp2.onfocus=function(){cleardata(this.id)};
+                inp3.onfocus=function(){cleardata(this.id)};
+                inp4.onfocus=function(){cleardata(this.id)};
+                
+                var resdiv=document.getElementById("result_"+i);
+                resdiv.innerHTML=sum[i];
+                gt = sum[i];
+                var gtdiv=document.getElementById("gtotal");
+                gtdiv.innerHTML=gt;
+                
+                inp1.onblur=function(){
+                    addvalue(eval(this.value),this.id,1);
+                    refreshresdivs();
+                };
+                inp2.onblur=function(){
+                    addvalue(eval(this.value),this.id,2);
+                    refreshresdivs();
+                };
+                inp3.onblur=function(){
+                    addvalue(eval(this.value),this.id,3);
+                    refreshresdivs();
+                };
+                inp4.onblur=function(){
+                    addvalue(eval(this.value),this.id,4);
+                    refreshresdivs();
+                };
+            }
+            function notechapters()
+            {
+                inp=document.getElementById("allchapters").value;
+                /*var xml = new XMLHttpRequest();
+                xml.onreadystatechange=function()
+                {
+                    if(xml.readyState==4 && xml.status==200)
+                    {
+                        //console.log(xml.responseText);
+                        //console.log("Chapters sent to process.php");
+                    }
+                }
+                xml.open("GET","process.php?chapters="+inp,true);
+                xml.send();*/
+                var mks=document.getElementById("getmarks").value;
+                if(inp=="Chapters..."||mks=="Total Marks...")
+                {
+                    alert("Invalid input");
+                    return;
+                }
+                TotalMarks=eval(mks);
+                inp=inp.split('-');
+                
+
+                for(i in inp)
+                {
+                    inp[i]=eval(inp[i]);
+                    arrayofchapters.push(inp[i]);
+                    sum[inp[i]]=0;
+                }
+                for(i in arrayofchapters)
+                {    
+                    var form=document.getElementById("completeform");
+                    para=document.createElement("p");
+                    para.innerHTML="Chapter "+arrayofchapters[i];
+                    form.appendChild(para);
+                    appendtoform(arrayofchapters[i]);
+                    form.appendChild(document.createElement("br"));
+                }
+
+                inpsub=document.createElement("input");
+                inpsub.type="submit";
+                inpsub.id="lastbutton";
+                inpsub.value="Submit weightage";
+                inpsub.style.color="black";
+                inpsub.style.visibility="hidden";
+                //inpsub.onclick=function(){submitform()};
+                form.appendChild(inpsub);
+                document.getElementById("getmarks").style.visibility="hidden";
+                document.getElementById("tmpbut").style.visibility="hidden";
+                var chap = document.getElementById("allchapters");
+                chap.style.visibility="hidden";
+                //console.log(chap);
+                form.appendChild(chap);
+            }
+            
+            $(document).ready(function(){
+                $("#wtform").hide();
+                $("#lastbutton").hide();
+                $("#gtotal").hide();
+                $("#wt").click(function(){
+                    $("#wtform").fadeIn();
+                    $("#tmpbut").click(function(){
+                        $("#gtotal").fadeIn();
+                        $("#lastbutton").fadeIn();
+                    });
+                });
+            });
+            </script>
+        </head>
+        <body >
+            <h1>
+                Question Paper Generator
+            </h1>
+            <br/>
+            <div id="wt" class="button">Weightage</div>
+            <div id="gtotal"></div>
+            <div id="wtform">
+                <input id="getmarks" onfocus="cleardata(this.id)" type="text" value="Total Marks..."/>
+                
+                <button id="tmpbut" onclick="notechapters()">Done</button>
+                <form id="completeform" action="showpaper.php">
+                    <input id="allchapters" name="allchapters" onfocus="cleardata(this.id)" type="text" value="Chapters..."/>
+                </form>
+        </div>
+    </body>
+    </html>
