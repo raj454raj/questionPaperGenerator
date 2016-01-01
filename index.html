@@ -15,7 +15,7 @@
    .button:hover
    {
     cursor:pointer;
-} 
+}
 .button
 {
     background-color:#6666ff;
@@ -133,7 +133,7 @@ function cleardata(id)
                 for(var i=1;i<=4;i++)
                 {
                     var t=document.getElementById("result_"+i);
-                    sum += eval(t.innerHTML); 
+                    sum += eval(t.innerHTML);
                 }
                 var gd=document.getElementById("gtotal");
                 gd.innerHTML=sum;
@@ -185,7 +185,7 @@ function cleardata(id)
                 for(var j=0;j<tmpchapsum.length;j++)
                 {
                     tmpchapsum[j]=0;
-                    reqjson[arrayofchapters[j]]={1:0, 2:0, 3:0, 4:0}               
+                    reqjson[arrayofchapters[j]]={1:0, 2:0, 3:0, 4:0}
                 }
                 //console.log(reqjson);
                 var tmpgtsum = 0;
@@ -202,14 +202,14 @@ function cleardata(id)
                         tmpchapsum[parseInt(i/4)] +=tmp[i].value*marks;
                         rsdiv.innerHTML=tmpchapsum[parseInt(i/4)];
                         tmpgtsum += tmp[i].value*marks;
-                        reqjson[chapter][marks]=eval(tmp[i].value); 
+                        reqjson[chapter][marks]=eval(tmp[i].value);
                     }
                 }
                 grdiv.innerHTML=tmpgtsum;
                 console.log("TotalMarks:"+TotalMarks);
                 checkval = document.getElementById("lastbutton");
                 //conole.log(checkval);
-                
+
                 if(grdiv.innerHTML==TotalMarks)
                 {
                     console.log("equal");
@@ -248,10 +248,10 @@ function cleardata(id)
                 inp3.className="ques";
                 inp4.className="ques";
 
-                inp1.value="Number of 1 mark questions"; 
-                inp2.value="Number of 2 mark questions"; 
-                inp3.value="Number of 3 mark questions"; 
-                inp4.value="Number of 4 mark questions"; 
+                inp1.value="Number of 1 mark questions";
+                inp2.value="Number of 2 mark questions";
+                inp3.value="Number of 3 mark questions";
+                inp4.value="Number of 4 mark questions";
                 res=document.createElement("div");
                 res.id="result_" + i;
                 res.style.display="inline";
@@ -265,18 +265,18 @@ function cleardata(id)
                 form.appendChild(inp3);
                 form.appendChild(inp4);
                 form.appendChild(res);
-                
+
                 inp1.onfocus=function(){cleardata(this.id)};
                 inp2.onfocus=function(){cleardata(this.id)};
                 inp3.onfocus=function(){cleardata(this.id)};
                 inp4.onfocus=function(){cleardata(this.id)};
-                
+
                 var resdiv=document.getElementById("result_"+i);
                 resdiv.innerHTML=sum[i];
                 gt = sum[i];
                 var gtdiv=document.getElementById("gtotal");
                 gtdiv.innerHTML=gt;
-                
+
                 inp1.onblur=function(){
                     addvalue(eval(this.value),this.id,1);
                     refreshresdivs();
@@ -316,7 +316,7 @@ function cleardata(id)
                 }
                 TotalMarks=eval(mks);
                 inp=inp.split('-');
-                
+
 
                 for(i in inp)
                 {
@@ -325,7 +325,7 @@ function cleardata(id)
                     sum[inp[i]]=0;
                 }
                 for(i in arrayofchapters)
-                {    
+                {
                     var form=document.getElementById("completeform");
                     para=document.createElement("p");
                     para.innerHTML="Chapter "+arrayofchapters[i];
@@ -349,7 +349,7 @@ function cleardata(id)
                 //console.log(chap);
                 form.appendChild(chap);
             }
-            
+
             $(document).ready(function(){
                 $("#wtform").hide();
                 $("#lastbutton").hide();
@@ -373,7 +373,7 @@ function cleardata(id)
             <div id="gtotal"></div>
             <div id="wtform">
                 <input id="getmarks" onfocus="cleardata(this.id)" type="text" value="Total Marks..."/>
-                
+
                 <button id="tmpbut" onclick="notechapters()">Done</button>
                 <form id="completeform" action="showpaper.php">
                     <input id="allchapters" name="allchapters" onfocus="cleardata(this.id)" type="text" value="Chapters..."/>

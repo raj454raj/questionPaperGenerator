@@ -14,11 +14,17 @@
 </head>
 <body>
 	<?php
+	
+	/*
+	====================================================================
+		ques_<chap_no>_<marks>_<nth this type of question>
+	====================================================================
+	*/
 		$con = mysqli_connect("localhost","root","yourRootPassword","img_db");
 		if (mysqli_connect_errno()) {
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-}
-	
+		   echo "Failed to connect to MySQL: " . mysqli_connect_error();
+		}
+
 	/*	for($i=1;$i<=20;$i++)
 		{
 			for($j=1;$j<=4;$j++)
@@ -48,7 +54,7 @@
 			{
 				$temp = explode("_", substr($chapmark,5));
 				$mainarray[$temp[0]][$temp[1]] = $ques;
-			}	
+			}
 		}
 		$arrayofquestions = [];
 			$q=mysqli_query($con,"SELECT Name FROM images");
@@ -75,7 +81,7 @@
 							array_push($arrayofquestions,$allpossibility[$value]);
 					}
 					}
-				}		
+				}
 	}
 	function cmp($a,$b)
 	{
@@ -83,7 +89,7 @@
 		$tmp2=substr($b, 7, 1);
 		if($tmp1>$tmp2)
 			return 1;
-		return 0;	
+		return 0;
 	}
 	usort($arrayofquestions,"cmp");
 
@@ -110,7 +116,7 @@
 		{
 			array_push($MarkQuestions_4, $value);
 		}
-		
+
 		//echo $value."<br/>";
 
 	}
@@ -134,7 +140,7 @@
 		echo $value."<br/>";
 	}
 	?>
-	
+
 	<!--
 	1.<img class="imag" src="uploads/ques_1_1_1.JPG"/><br/>
 	2.<img class="imag" src="uploads/ques_1_1_2.JPG"/><br/>
